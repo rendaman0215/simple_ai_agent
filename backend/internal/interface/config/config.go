@@ -6,17 +6,21 @@ import (
 
 // Config はアプリケーションの設定を管理する
 type Config struct {
-	GeminiAPIKey string
-	GRPCPort     string
-	LogLevel     string
+	GeminiAPIKey     string
+	GRPCPort         string
+	HTTPPort         string
+	CORSAllowOrigins string
+	LogLevel         string
 }
 
 // LoadConfig は環境変数から設定を読み込む
 func LoadConfig() *Config {
 	return &Config{
-		GeminiAPIKey: getEnv("GEMINI_API_KEY", ""),
-		GRPCPort:     getEnv("GRPC_PORT", "8080"),
-		LogLevel:     getEnv("LOG_LEVEL", "info"),
+		GeminiAPIKey:     getEnv("GEMINI_API_KEY", ""),
+		GRPCPort:         getEnv("GRPC_PORT", "8080"),
+		HTTPPort:         getEnv("HTTP_PORT", "8081"),
+		CORSAllowOrigins: getEnv("CORS_ALLOW_ORIGINS", "*"),
+		LogLevel:         getEnv("LOG_LEVEL", "info"),
 	}
 }
 

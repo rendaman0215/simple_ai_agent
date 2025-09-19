@@ -1,8 +1,8 @@
 version: v1
 managed:
   enabled: true
-  go_package_prefix: 
-    default: github.com/rendaman0215/protobuf/gen/go
+  go_package_prefix:
+    default: github.com/rendaman0215/simple_ai_agent/proto/gen/go
 plugins:
   # ===== protobuf messages =====
   - plugin: buf.build/protocolbuffers/go:v1.34.1
@@ -11,6 +11,11 @@ plugins:
       - paths=source_relative
   # ===== gRPC service stubs =====
   - plugin: buf.build/grpc/go:v1.3.0
+    out: gen/go
+    opt:
+      - paths=source_relative
+  # ===== Connect-Go service stubs =====
+  - plugin: buf.build/connectrpc/go
     out: gen/go
     opt:
       - paths=source_relative
