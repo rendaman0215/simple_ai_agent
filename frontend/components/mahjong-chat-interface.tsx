@@ -7,7 +7,7 @@ import Header from "@/components/header";
 import InputBox from "@/components/input";
 import Talk from "@/components/talk";
 import { Message } from "@/lib/type";
-import { generateMahjongResponse } from "@/lib/mockMessage";
+import { askMahjongAI } from "@/lib/mockMessage";
 
 export function MahjongChatInterface() {
   const [messages, setMessages] = useState<Message[]>([
@@ -45,11 +45,13 @@ export function MahjongChatInterface() {
     setInputValue("");
     setIsLoading(true);
 
+    const aiResponse = await askMahjongAI(inputValue);
+
     // Simulate AI response
     setTimeout(() => {
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
-        content: generateMahjongResponse(),
+        content: aiResponse.response,
         sender: "ai",
         timestamp: new Date(),
       };

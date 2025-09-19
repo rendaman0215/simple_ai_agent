@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { Message } from "@/lib/type";
 import MahjongImg from "@/app/assets/mahjong.svg";
 import Image from "next/image";
+import ReactMarkdown from "react-markdown";
 
 export default function Talk({
   messages,
@@ -48,7 +49,9 @@ export default function Talk({
                   : "bg-card text-card-foreground"
               )}
             >
-              <p className="text-sm leading-relaxed">{message.content}</p>
+              <p className="text-sm leading-relaxed">
+                <ReactMarkdown>{message.content}</ReactMarkdown>
+              </p>
               <p
                 className={cn(
                   "text-xs mt-2 opacity-70",
