@@ -57,8 +57,8 @@ func (g *GeminiClient) AskAI(ctx context.Context, request *entity.AIRequest) (*e
 	}).Debug("Sending request to Gemini API")
 
 	// モデルの設定を更新
-	//g.model.SetTemperature(request.Temperature)
-	//g.model.SetMaxOutputTokens(request.MaxTokens)
+	g.model.SetTemperature(request.Temperature)
+	g.model.SetMaxOutputTokens(request.MaxTokens)
 
 	// コンテキストがある場合は追加
 	var parts []genai.Part
