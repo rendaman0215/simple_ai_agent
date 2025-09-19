@@ -1,0 +1,23 @@
+<svg width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="Mahjong Tile - Red 5 Pin" xmlns="http://www.w3.org/2000/svg">
+  <title>Mahjong Tile - Red 5 Pin</title>
+  <defs>
+    <linearGradient id="tileShadow" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="currentColor" stop-opacity="0.08"/>
+      <stop offset="1" stop-color="currentColor" stop-opacity="0.00"/>
+    </linearGradient>
+  </defs>
+  <!-- body -->
+  <rect x="10" y="6" width="44" height="52" rx="6" fill="url(#tileShadow)" />
+  <rect x="12" y="8" width="40" height="48" rx="5" fill="none" stroke="currentColor" stroke-width="2"/>
+  <!-- face margin -->
+  <rect x="16" y="12" width="32" height="40" rx="3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.35"/>
+  <!-- dots (pin) -->
+  <!-- corners -->
+  <circle cx="24" cy="20" r="4.5" fill="none" stroke="currentColor" stroke-width="2"/>
+  <circle cx="40" cy="20" r="4.5" fill="none" stroke="currentColor" stroke-width="2"/>
+  <circle cx="24" cy="44" r="4.5" fill="none" stroke="currentColor" stroke-width="2"/>
+  <circle cx="40" cy="44" r="4.5" fill="none" stroke="currentColor" stroke-width="2"/>
+  <!-- center (aka-5) -->
+  <circle cx="32" cy="32" r="6" fill="currentColor" fill-opacity="0.9"/>
+  <circle cx="32" cy="32" r="6" fill="none" stroke="currentColor" stroke-width="2"/>
+</svg>
