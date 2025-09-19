@@ -19,14 +19,21 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	MahjongAIService_AskMahjongAI_FullMethodName = "/mahjong.ai.v1.MahjongAIService/AskMahjongAI"
+	MahjongAIService_AskMahjongAI_FullMethodName       = "/mahjong.ai.v1.MahjongAIService/AskMahjongAI"
+	MahjongAIService_AskMahjongAIStream_FullMethodName = "/mahjong.ai.v1.MahjongAIService/AskMahjongAIStream"
+	MahjongAIService_HealthCheck_FullMethodName        = "/mahjong.ai.v1.MahjongAIService/HealthCheck"
 )
 
 // MahjongAIServiceClient is the client API for MahjongAIService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MahjongAIServiceClient interface {
+	// 麻雀AIに質問する（同期）
 	AskMahjongAI(ctx context.Context, in *AskMahjongAIRequest, opts ...grpc.CallOption) (*AskMahjongAIResponse, error)
+	// 麻雀AIに質問する（ストリーミング）
+	AskMahjongAIStream(ctx context.Context, in *AskMahjongAIRequest, opts ...grpc.CallOption) (MahjongAIService_AskMahjongAIStreamClient, error)
+	// ヘルスチェック
+	HealthCheck(ctx context.Context, in *HealthCheckRequest, opts ...grpc.CallOption) (*HealthCheckResponse, error)
 }
 
 type mahjongAIServiceClient struct {
@@ -46,11 +53,57 @@ func (c *mahjongAIServiceClient) AskMahjongAI(ctx context.Context, in *AskMahjon
 	return out, nil
 }
 
+func (c *mahjongAIServiceClient) AskMahjongAIStream(ctx context.Context, in *AskMahjongAIRequest, opts ...grpc.CallOption) (MahjongAIService_AskMahjongAIStreamClient, error) {
+	stream, err := c.cc.NewStream(ctx, &MahjongAIService_ServiceDesc.Streams[0], MahjongAIService_AskMahjongAIStream_FullMethodName, opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &mahjongAIServiceAskMahjongAIStreamClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type MahjongAIService_AskMahjongAIStreamClient interface {
+	Recv() (*AskMahjongAIStreamResponse, error)
+	grpc.ClientStream
+}
+
+type mahjongAIServiceAskMahjongAIStreamClient struct {
+	grpc.ClientStream
+}
+
+func (x *mahjongAIServiceAskMahjongAIStreamClient) Recv() (*AskMahjongAIStreamResponse, error) {
+	m := new(AskMahjongAIStreamResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *mahjongAIServiceClient) HealthCheck(ctx context.Context, in *HealthCheckRequest, opts ...grpc.CallOption) (*HealthCheckResponse, error) {
+	out := new(HealthCheckResponse)
+	err := c.cc.Invoke(ctx, MahjongAIService_HealthCheck_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MahjongAIServiceServer is the server API for MahjongAIService service.
 // All implementations must embed UnimplementedMahjongAIServiceServer
 // for forward compatibility
 type MahjongAIServiceServer interface {
+	// 麻雀AIに質問する（同期）
 	AskMahjongAI(context.Context, *AskMahjongAIRequest) (*AskMahjongAIResponse, error)
+	// 麻雀AIに質問する（ストリーミング）
+	AskMahjongAIStream(*AskMahjongAIRequest, MahjongAIService_AskMahjongAIStreamServer) error
+	// ヘルスチェック
+	HealthCheck(context.Context, *HealthCheckRequest) (*HealthCheckResponse, error)
 	mustEmbedUnimplementedMahjongAIServiceServer()
 }
 
@@ -60,6 +113,12 @@ type UnimplementedMahjongAIServiceServer struct {
 
 func (UnimplementedMahjongAIServiceServer) AskMahjongAI(context.Context, *AskMahjongAIRequest) (*AskMahjongAIResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AskMahjongAI not implemented")
+}
+func (UnimplementedMahjongAIServiceServer) AskMahjongAIStream(*AskMahjongAIRequest, MahjongAIService_AskMahjongAIStreamServer) error {
+	return status.Errorf(codes.Unimplemented, "method AskMahjongAIStream not implemented")
+}
+func (UnimplementedMahjongAIServiceServer) HealthCheck(context.Context, *HealthCheckRequest) (*HealthCheckResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HealthCheck not implemented")
 }
 func (UnimplementedMahjongAIServiceServer) mustEmbedUnimplementedMahjongAIServiceServer() {}
 
@@ -92,6 +151,45 @@ func _MahjongAIService_AskMahjongAI_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MahjongAIService_AskMahjongAIStream_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(AskMahjongAIRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(MahjongAIServiceServer).AskMahjongAIStream(m, &mahjongAIServiceAskMahjongAIStreamServer{stream})
+}
+
+type MahjongAIService_AskMahjongAIStreamServer interface {
+	Send(*AskMahjongAIStreamResponse) error
+	grpc.ServerStream
+}
+
+type mahjongAIServiceAskMahjongAIStreamServer struct {
+	grpc.ServerStream
+}
+
+func (x *mahjongAIServiceAskMahjongAIStreamServer) Send(m *AskMahjongAIStreamResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func _MahjongAIService_HealthCheck_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HealthCheckRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MahjongAIServiceServer).HealthCheck(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MahjongAIService_HealthCheck_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MahjongAIServiceServer).HealthCheck(ctx, req.(*HealthCheckRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MahjongAIService_ServiceDesc is the grpc.ServiceDesc for MahjongAIService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -103,7 +201,17 @@ var MahjongAIService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "AskMahjongAI",
 			Handler:    _MahjongAIService_AskMahjongAI_Handler,
 		},
+		{
+			MethodName: "HealthCheck",
+			Handler:    _MahjongAIService_HealthCheck_Handler,
+		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "AskMahjongAIStream",
+			Handler:       _MahjongAIService_AskMahjongAIStream_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "mahjong/ai/v1/ai.proto",
 }

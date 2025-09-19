@@ -4,7 +4,194 @@
 // @ts-nocheck
 
 import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
-import { Message, proto3 } from "@bufbuild/protobuf";
+import { Message, proto3, protoInt64, Timestamp } from "@bufbuild/protobuf";
+
+/**
+ * エラー情報
+ *
+ * @generated from message mahjong.ai.v1.ErrorInfo
+ */
+export class ErrorInfo extends Message<ErrorInfo> {
+  /**
+   * エラーコード
+   *
+   * @generated from field: string code = 1;
+   */
+  code = "";
+
+  /**
+   * エラーメッセージ
+   *
+   * @generated from field: string message = 2;
+   */
+  message = "";
+
+  /**
+   * エラー詳細
+   *
+   * @generated from field: string details = 3;
+   */
+  details = "";
+
+  constructor(data?: PartialMessage<ErrorInfo>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "mahjong.ai.v1.ErrorInfo";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "code", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "message", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "details", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ErrorInfo {
+    return new ErrorInfo().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ErrorInfo {
+    return new ErrorInfo().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ErrorInfo {
+    return new ErrorInfo().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: ErrorInfo | PlainMessage<ErrorInfo> | undefined, b: ErrorInfo | PlainMessage<ErrorInfo> | undefined): boolean {
+    return proto3.util.equals(ErrorInfo, a, b);
+  }
+}
+
+/**
+ * リクエストメタデータ
+ *
+ * @generated from message mahjong.ai.v1.RequestMetadata
+ */
+export class RequestMetadata extends Message<RequestMetadata> {
+  /**
+   * リクエストID
+   *
+   * @generated from field: string request_id = 1;
+   */
+  requestId = "";
+
+  /**
+   * リクエスト時刻
+   *
+   * @generated from field: google.protobuf.Timestamp timestamp = 2;
+   */
+  timestamp?: Timestamp;
+
+  /**
+   * クライアントバージョン
+   *
+   * @generated from field: string client_version = 3;
+   */
+  clientVersion = "";
+
+  /**
+   * 追加ヘッダー
+   *
+   * @generated from field: map<string, string> headers = 4;
+   */
+  headers: { [key: string]: string } = {};
+
+  constructor(data?: PartialMessage<RequestMetadata>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "mahjong.ai.v1.RequestMetadata";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "request_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "timestamp", kind: "message", T: Timestamp },
+    { no: 3, name: "client_version", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 4, name: "headers", kind: "map", K: 9 /* ScalarType.STRING */, V: {kind: "scalar", T: 9 /* ScalarType.STRING */} },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): RequestMetadata {
+    return new RequestMetadata().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): RequestMetadata {
+    return new RequestMetadata().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): RequestMetadata {
+    return new RequestMetadata().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: RequestMetadata | PlainMessage<RequestMetadata> | undefined, b: RequestMetadata | PlainMessage<RequestMetadata> | undefined): boolean {
+    return proto3.util.equals(RequestMetadata, a, b);
+  }
+}
+
+/**
+ * レスポンスメタデータ
+ *
+ * @generated from message mahjong.ai.v1.ResponseMetadata
+ */
+export class ResponseMetadata extends Message<ResponseMetadata> {
+  /**
+   * リクエストID
+   *
+   * @generated from field: string request_id = 1;
+   */
+  requestId = "";
+
+  /**
+   * レスポンス時刻
+   *
+   * @generated from field: google.protobuf.Timestamp timestamp = 2;
+   */
+  timestamp?: Timestamp;
+
+  /**
+   * 処理時間（ミリ秒）
+   *
+   * @generated from field: int64 processing_time_ms = 3;
+   */
+  processingTimeMs = protoInt64.zero;
+
+  /**
+   * サーバーバージョン
+   *
+   * @generated from field: string server_version = 4;
+   */
+  serverVersion = "";
+
+  constructor(data?: PartialMessage<ResponseMetadata>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "mahjong.ai.v1.ResponseMetadata";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "request_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "timestamp", kind: "message", T: Timestamp },
+    { no: 3, name: "processing_time_ms", kind: "scalar", T: 3 /* ScalarType.INT64 */ },
+    { no: 4, name: "server_version", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ResponseMetadata {
+    return new ResponseMetadata().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ResponseMetadata {
+    return new ResponseMetadata().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ResponseMetadata {
+    return new ResponseMetadata().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: ResponseMetadata | PlainMessage<ResponseMetadata> | undefined, b: ResponseMetadata | PlainMessage<ResponseMetadata> | undefined): boolean {
+    return proto3.util.equals(ResponseMetadata, a, b);
+  }
+}
 
 /**
  * 麻雀AIのリクエスト
@@ -13,11 +200,39 @@ import { Message, proto3 } from "@bufbuild/protobuf";
  */
 export class AskMahjongAIRequest extends Message<AskMahjongAIRequest> {
   /**
-   * 麻雀AIのデータ
+   * 麻雀AIへの質問
    *
    * @generated from field: string prompt = 1;
    */
   prompt = "";
+
+  /**
+   * リクエストメタデータ
+   *
+   * @generated from field: mahjong.ai.v1.RequestMetadata metadata = 2;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * 最大トークン数
+   *
+   * @generated from field: int32 max_tokens = 3;
+   */
+  maxTokens = 0;
+
+  /**
+   * 温度パラメータ (0.0-2.0)
+   *
+   * @generated from field: float temperature = 4;
+   */
+  temperature = 0;
+
+  /**
+   * コンテキスト情報
+   *
+   * @generated from field: repeated string context = 5;
+   */
+  context: string[] = [];
 
   constructor(data?: PartialMessage<AskMahjongAIRequest>) {
     super();
@@ -28,6 +243,10 @@ export class AskMahjongAIRequest extends Message<AskMahjongAIRequest> {
   static readonly typeName = "mahjong.ai.v1.AskMahjongAIRequest";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "prompt", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "metadata", kind: "message", T: RequestMetadata },
+    { no: 3, name: "max_tokens", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
+    { no: 4, name: "temperature", kind: "scalar", T: 2 /* ScalarType.FLOAT */ },
+    { no: 5, name: "context", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): AskMahjongAIRequest {
@@ -54,9 +273,46 @@ export class AskMahjongAIRequest extends Message<AskMahjongAIRequest> {
  */
 export class AskMahjongAIResponse extends Message<AskMahjongAIResponse> {
   /**
-   * @generated from field: string response = 1;
+   * @generated from oneof mahjong.ai.v1.AskMahjongAIResponse.result
    */
-  response = "";
+  result: {
+    /**
+     * 成功時のレスポンス
+     *
+     * @generated from field: string response = 1;
+     */
+    value: string;
+    case: "response";
+  } | {
+    /**
+     * エラー情報
+     *
+     * @generated from field: mahjong.ai.v1.ErrorInfo error = 2;
+     */
+    value: ErrorInfo;
+    case: "error";
+  } | { case: undefined; value?: undefined } = { case: undefined };
+
+  /**
+   * レスポンスメタデータ
+   *
+   * @generated from field: mahjong.ai.v1.ResponseMetadata metadata = 3;
+   */
+  metadata?: ResponseMetadata;
+
+  /**
+   * 使用トークン数
+   *
+   * @generated from field: int32 tokens_used = 4;
+   */
+  tokensUsed = 0;
+
+  /**
+   * 信頼度スコア (0.0-1.0)
+   *
+   * @generated from field: float confidence = 5;
+   */
+  confidence = 0;
 
   constructor(data?: PartialMessage<AskMahjongAIResponse>) {
     super();
@@ -66,7 +322,11 @@ export class AskMahjongAIResponse extends Message<AskMahjongAIResponse> {
   static readonly runtime: typeof proto3 = proto3;
   static readonly typeName = "mahjong.ai.v1.AskMahjongAIResponse";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "response", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 1, name: "response", kind: "scalar", T: 9 /* ScalarType.STRING */, oneof: "result" },
+    { no: 2, name: "error", kind: "message", T: ErrorInfo, oneof: "result" },
+    { no: 3, name: "metadata", kind: "message", T: ResponseMetadata },
+    { no: 4, name: "tokens_used", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
+    { no: 5, name: "confidence", kind: "scalar", T: 2 /* ScalarType.FLOAT */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): AskMahjongAIResponse {
@@ -85,4 +345,207 @@ export class AskMahjongAIResponse extends Message<AskMahjongAIResponse> {
     return proto3.util.equals(AskMahjongAIResponse, a, b);
   }
 }
+
+/**
+ * ストリーミングレスポンス
+ *
+ * @generated from message mahjong.ai.v1.AskMahjongAIStreamResponse
+ */
+export class AskMahjongAIStreamResponse extends Message<AskMahjongAIStreamResponse> {
+  /**
+   * @generated from oneof mahjong.ai.v1.AskMahjongAIStreamResponse.chunk
+   */
+  chunk: {
+    /**
+     * テキストチャンク
+     *
+     * @generated from field: string text_chunk = 1;
+     */
+    value: string;
+    case: "textChunk";
+  } | {
+    /**
+     * エラー情報
+     *
+     * @generated from field: mahjong.ai.v1.ErrorInfo error = 2;
+     */
+    value: ErrorInfo;
+    case: "error";
+  } | {
+    /**
+     * 最終メタデータ（ストリーム終了時）
+     *
+     * @generated from field: mahjong.ai.v1.ResponseMetadata metadata = 3;
+     */
+    value: ResponseMetadata;
+    case: "metadata";
+  } | { case: undefined; value?: undefined } = { case: undefined };
+
+  /**
+   * 最終チャンクかどうか
+   *
+   * @generated from field: bool is_final = 4;
+   */
+  isFinal = false;
+
+  constructor(data?: PartialMessage<AskMahjongAIStreamResponse>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "mahjong.ai.v1.AskMahjongAIStreamResponse";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "text_chunk", kind: "scalar", T: 9 /* ScalarType.STRING */, oneof: "chunk" },
+    { no: 2, name: "error", kind: "message", T: ErrorInfo, oneof: "chunk" },
+    { no: 3, name: "metadata", kind: "message", T: ResponseMetadata, oneof: "chunk" },
+    { no: 4, name: "is_final", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): AskMahjongAIStreamResponse {
+    return new AskMahjongAIStreamResponse().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): AskMahjongAIStreamResponse {
+    return new AskMahjongAIStreamResponse().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): AskMahjongAIStreamResponse {
+    return new AskMahjongAIStreamResponse().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: AskMahjongAIStreamResponse | PlainMessage<AskMahjongAIStreamResponse> | undefined, b: AskMahjongAIStreamResponse | PlainMessage<AskMahjongAIStreamResponse> | undefined): boolean {
+    return proto3.util.equals(AskMahjongAIStreamResponse, a, b);
+  }
+}
+
+/**
+ * ヘルスチェックリクエスト
+ *
+ * @generated from message mahjong.ai.v1.HealthCheckRequest
+ */
+export class HealthCheckRequest extends Message<HealthCheckRequest> {
+  /**
+   * サービス名（オプション）
+   *
+   * @generated from field: string service = 1;
+   */
+  service = "";
+
+  constructor(data?: PartialMessage<HealthCheckRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "mahjong.ai.v1.HealthCheckRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "service", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): HealthCheckRequest {
+    return new HealthCheckRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): HealthCheckRequest {
+    return new HealthCheckRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): HealthCheckRequest {
+    return new HealthCheckRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: HealthCheckRequest | PlainMessage<HealthCheckRequest> | undefined, b: HealthCheckRequest | PlainMessage<HealthCheckRequest> | undefined): boolean {
+    return proto3.util.equals(HealthCheckRequest, a, b);
+  }
+}
+
+/**
+ * ヘルスチェックレスポンス
+ *
+ * @generated from message mahjong.ai.v1.HealthCheckResponse
+ */
+export class HealthCheckResponse extends Message<HealthCheckResponse> {
+  /**
+   * @generated from field: mahjong.ai.v1.HealthCheckResponse.ServingStatus status = 1;
+   */
+  status = HealthCheckResponse_ServingStatus.UNKNOWN;
+
+  /**
+   * ステータスメッセージ
+   *
+   * @generated from field: string message = 2;
+   */
+  message = "";
+
+  /**
+   * チェック時刻
+   *
+   * @generated from field: google.protobuf.Timestamp timestamp = 3;
+   */
+  timestamp?: Timestamp;
+
+  constructor(data?: PartialMessage<HealthCheckResponse>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "mahjong.ai.v1.HealthCheckResponse";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "status", kind: "enum", T: proto3.getEnumType(HealthCheckResponse_ServingStatus) },
+    { no: 2, name: "message", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "timestamp", kind: "message", T: Timestamp },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): HealthCheckResponse {
+    return new HealthCheckResponse().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): HealthCheckResponse {
+    return new HealthCheckResponse().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): HealthCheckResponse {
+    return new HealthCheckResponse().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: HealthCheckResponse | PlainMessage<HealthCheckResponse> | undefined, b: HealthCheckResponse | PlainMessage<HealthCheckResponse> | undefined): boolean {
+    return proto3.util.equals(HealthCheckResponse, a, b);
+  }
+}
+
+/**
+ * @generated from enum mahjong.ai.v1.HealthCheckResponse.ServingStatus
+ */
+export enum HealthCheckResponse_ServingStatus {
+  /**
+   * @generated from enum value: UNKNOWN = 0;
+   */
+  UNKNOWN = 0,
+
+  /**
+   * @generated from enum value: SERVING = 1;
+   */
+  SERVING = 1,
+
+  /**
+   * @generated from enum value: NOT_SERVING = 2;
+   */
+  NOT_SERVING = 2,
+
+  /**
+   * サービスが見つからない場合
+   *
+   * @generated from enum value: SERVICE_UNKNOWN = 3;
+   */
+  SERVICE_UNKNOWN = 3,
+}
+// Retrieve enum metadata with: proto3.getEnumType(HealthCheckResponse_ServingStatus)
+proto3.util.setEnumType(HealthCheckResponse_ServingStatus, "mahjong.ai.v1.HealthCheckResponse.ServingStatus", [
+  { no: 0, name: "UNKNOWN" },
+  { no: 1, name: "SERVING" },
+  { no: 2, name: "NOT_SERVING" },
+  { no: 3, name: "SERVICE_UNKNOWN" },
+]);
 

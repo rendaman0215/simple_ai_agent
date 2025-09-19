@@ -2,19 +2,88 @@ syntax = "proto3";
 
 package mahjong.ai.v1;
 
+import "google/protobuf/timestamp.proto";
+
+
+// エラー情報
+message ErrorInfo {
+  string code = 1;           // エラーコード
+  string message = 2;        // エラーメッセージ
+  string details = 3;        // エラー詳細
+}
+
+// リクエストメタデータ
+message RequestMetadata {
+  string request_id = 1;                          // リクエストID
+  google.protobuf.Timestamp timestamp = 2;       // リクエスト時刻
+  string client_version = 3;                      // クライアントバージョン
+  map<string, string> headers = 4;               // 追加ヘッダー
+}
+
+// レスポンスメタデータ
+message ResponseMetadata {
+  string request_id = 1;                          // リクエストID
+  google.protobuf.Timestamp timestamp = 2;       // レスポンス時刻
+  int64 processing_time_ms = 3;                   // 処理時間（ミリ秒）
+  string server_version = 4;                      // サーバーバージョン
+}
 
 // 麻雀AIのリクエスト
 message AskMahjongAIRequest {
-  // 麻雀AIのデータ
-  string prompt = 1;
+  string prompt = 1; // 麻雀AIへの質問
+  RequestMetadata metadata = 2;                   // リクエストメタデータ
+  int32 max_tokens = 3;                          // 最大トークン数
+  float temperature = 4;                         // 温度パラメータ (0.0-2.0)
+  repeated string context = 5;                   // コンテキスト情報
 }
 
 // 麻雀AIのレスポンス
 message AskMahjongAIResponse {
-  string response = 1;
+  oneof result {
+    string response = 1;                         // 成功時のレスポンス
+    ErrorInfo error = 2;                         // エラー情報
+  }
+  ResponseMetadata metadata = 3;                 // レスポンスメタデータ
+  int32 tokens_used = 4;                        // 使用トークン数
+  float confidence = 5;                         // 信頼度スコア (0.0-1.0)
 }
 
-//  麻雀AIのサービス
+// ストリーミングレスポンス
+message AskMahjongAIStreamResponse {
+  oneof chunk {
+    string text_chunk = 1;                       // テキストチャンク
+    ErrorInfo error = 2;                         // エラー情報
+    ResponseMetadata metadata = 3;               // 最終メタデータ（ストリーム終了時）
+  }
+  bool is_final = 4;                            // 最終チャンクかどうか
+}
+
+// 麻雀AIのサービス
 service MahjongAIService {
+  // 麻雀AIに質問する（同期）
   rpc AskMahjongAI (AskMahjongAIRequest) returns (AskMahjongAIResponse);
+  
+  // 麻雀AIに質問する（ストリーミング）
+  rpc AskMahjongAIStream (AskMahjongAIRequest) returns (stream AskMahjongAIStreamResponse);
+  
+  // ヘルスチェック
+  rpc HealthCheck (HealthCheckRequest) returns (HealthCheckResponse);
+}
+
+// ヘルスチェックリクエスト
+message HealthCheckRequest {
+  string service = 1; // サービス名（オプション）
+}
+
+// ヘルスチェックレスポンス
+message HealthCheckResponse {
+  enum ServingStatus {
+    UNKNOWN = 0;
+    SERVING = 1;
+    NOT_SERVING = 2;
+    SERVICE_UNKNOWN = 3;  // サービスが見つからない場合
+  }
+  ServingStatus status = 1;
+  string message = 2;                            // ステータスメッセージ
+  google.protobuf.Timestamp timestamp = 3;      // チェック時刻
 }

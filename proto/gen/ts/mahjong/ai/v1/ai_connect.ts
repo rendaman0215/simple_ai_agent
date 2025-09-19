@@ -3,11 +3,11 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { AskMahjongAIRequest, AskMahjongAIResponse } from "./ai_pb";
+import { AskMahjongAIRequest, AskMahjongAIResponse, AskMahjongAIStreamResponse, HealthCheckRequest, HealthCheckResponse } from "./ai_pb";
 import { MethodKind } from "@bufbuild/protobuf";
 
 /**
- *  麻雀AIのサービス
+ * 麻雀AIのサービス
  *
  * @generated from service mahjong.ai.v1.MahjongAIService
  */
@@ -15,12 +15,36 @@ export const MahjongAIService = {
   typeName: "mahjong.ai.v1.MahjongAIService",
   methods: {
     /**
+     * 麻雀AIに質問する（同期）
+     *
      * @generated from rpc mahjong.ai.v1.MahjongAIService.AskMahjongAI
      */
     askMahjongAI: {
       name: "AskMahjongAI",
       I: AskMahjongAIRequest,
       O: AskMahjongAIResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * 麻雀AIに質問する（ストリーミング）
+     *
+     * @generated from rpc mahjong.ai.v1.MahjongAIService.AskMahjongAIStream
+     */
+    askMahjongAIStream: {
+      name: "AskMahjongAIStream",
+      I: AskMahjongAIRequest,
+      O: AskMahjongAIStreamResponse,
+      kind: MethodKind.ServerStreaming,
+    },
+    /**
+     * ヘルスチェック
+     *
+     * @generated from rpc mahjong.ai.v1.MahjongAIService.HealthCheck
+     */
+    healthCheck: {
+      name: "HealthCheck",
+      I: HealthCheckRequest,
+      O: HealthCheckResponse,
       kind: MethodKind.Unary,
     },
   }
