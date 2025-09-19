@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package mahjong.ai.v1;
+
+
+// 麻雀AIのリクエスト
+message AskMahjongAIRequest {
+  // 麻雀AIのデータ
+  string prompt = 1;
+}
+
+// 麻雀AIのレスポンス
+message AskMahjongAIResponse {
+  string response = 1;
+}
+
+//  麻雀AIのサービス
+service MahjongAIService {
+  rpc AskMahjongAI (AskMahjongAIRequest) returns (AskMahjongAIResponse);
+}

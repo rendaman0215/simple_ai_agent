@@ -1,0 +1,12 @@
+version: v1
+plugins:
+  - plugin: buf.build/bufbuild/connect-es:v0.8.6
+    out: gen/ts
+    opt:
+      - target=ts
+      - import_extension=none
+  - plugin: buf.build/bufbuild/es:v1.2.0
+    out: gen/ts
+    opt:
+      - import_extension=none
+      - target=ts
