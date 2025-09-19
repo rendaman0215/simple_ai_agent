@@ -28,8 +28,8 @@ func NewGeminiClient(apiKey string, logger *logrus.Logger) (repository.AIReposit
 		return nil, fmt.Errorf("failed to create Gemini client: %w", err)
 	}
 
-	// Gemini Pro モデルを使用
-	model := client.GenerativeModel("gemini-pro")
+	// Gemini 2.5 Flash モデルを使用
+	model := client.GenerativeModel("gemini-2.5-flash")
 
 	// 麻雀AIとしての設定を追加
 	model.SystemInstruction = &genai.Content{
@@ -48,7 +48,7 @@ func NewGeminiClient(apiKey string, logger *logrus.Logger) (repository.AIReposit
 // AskAI はGemini APIにプロンプトを送信してレスポンスを取得する
 func (g *GeminiClient) AskAI(ctx context.Context, request *entity.AIRequest) (*entity.AIResponse, error) {
 	startTime := time.Now()
-	
+
 	g.logger.WithFields(logrus.Fields{
 		"prompt":      request.Prompt,
 		"max_tokens":  request.MaxTokens,
@@ -57,8 +57,8 @@ func (g *GeminiClient) AskAI(ctx context.Context, request *entity.AIRequest) (*e
 	}).Debug("Sending request to Gemini API")
 
 	// モデルの設定を更新
-	g.model.SetTemperature(request.Temperature)
-	g.model.SetMaxOutputTokens(request.MaxTokens)
+	//g.model.SetTemperature(request.Temperature)
+	//g.model.SetMaxOutputTokens(request.MaxTokens)
 
 	// コンテキストがある場合は追加
 	var parts []genai.Part
@@ -104,9 +104,9 @@ func (g *GeminiClient) AskAI(ctx context.Context, request *entity.AIRequest) (*e
 	confidence := float32(0.8) // Geminiは信頼度スコアを提供しないため、デフォルト値を使用
 
 	g.logger.WithFields(logrus.Fields{
-		"response_length":  len(responseText),
-		"tokens_used":      tokensUsed,
-		"processing_time":  processingTime,
+		"response_length": len(responseText),
+		"tokens_used":     tokensUsed,
+		"processing_time": processingTime,
 	}).Debug("Received response from Gemini API")
 
 	return entity.NewAIResponseWithMetrics(responseText, tokensUsed, confidence, processingTime), nil
@@ -122,7 +122,7 @@ func (g *GeminiClient) AskAIStream(ctx context.Context, request *entity.AIReques
 		defer close(errorChan)
 
 		startTime := time.Now()
-		
+
 		g.logger.WithFields(logrus.Fields{
 			"prompt":      request.Prompt,
 			"max_tokens":  request.MaxTokens,
@@ -143,7 +143,7 @@ func (g *GeminiClient) AskAIStream(ctx context.Context, request *entity.AIReques
 
 		// ストリーミングリクエストを送信
 		iter := g.model.GenerateContentStream(ctx, parts...)
-		
+
 		fullResponse := ""
 		for {
 			resp, err := iter.Next()
@@ -161,7 +161,7 @@ func (g *GeminiClient) AskAIStream(ctx context.Context, request *entity.AIReques
 					if textPart, ok := part.(genai.Text); ok {
 						chunkText := string(textPart)
 						fullResponse += chunkText
-						
+
 						// チャンクレスポンスを送信
 						responseChan <- entity.NewAIResponse(chunkText)
 					}
@@ -170,11 +170,11 @@ func (g *GeminiClient) AskAIStream(ctx context.Context, request *entity.AIReques
 		}
 
 		processingTime := time.Since(startTime).Milliseconds()
-		
+
 		// 最終レスポンスのメタデータを送信
 		tokensUsed := int32(len(fullResponse) / 4) // 概算
 		confidence := float32(0.8)
-		
+
 		finalResponse := entity.NewAIResponseWithMetrics("", tokensUsed, confidence, processingTime)
 		responseChan <- finalResponse
 

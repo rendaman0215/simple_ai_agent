@@ -5,7 +5,7 @@ go 1.24.3
 replace github.com/rendaman0215/simple_ai_agent/proto => ../proto
 
 require (
-	github.com/google/generative-ai-go v0.20.1
+	github.com/google/generative-ai-go v0.13.0
 	github.com/google/uuid v1.6.0
 	github.com/rendaman0215/simple_ai_agent/proto v0.0.0-00010101000000-000000000000
 	github.com/sirupsen/logrus v1.9.3
